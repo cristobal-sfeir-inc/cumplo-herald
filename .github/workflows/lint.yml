@@ -40,7 +40,6 @@ jobs:
         uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ vars.WIF_PROVIDER }}
-          service_account: ${{ vars.PUBLISH_SA }}
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v3
