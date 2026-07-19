@@ -43,7 +43,10 @@ jobs:
           workload_identity_provider: ${{ vars.WIF_PROVIDER }}
           service_account: ${{ vars.PUBLISH_SA }}
 
-      - name: Configure Poetry auth for Artifact Registry
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Configure Poetry registry credentials
         run: poetry config http-basic.cumplo-pypi oauth2accesstoken "$(gcloud auth print-access-token)"
 
       - name: Install dependencies
