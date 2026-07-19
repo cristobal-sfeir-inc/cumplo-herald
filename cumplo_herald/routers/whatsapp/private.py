@@ -1,3 +1,5 @@
+"""Private WhatsApp router: demo endpoint to trigger WhatsApp notifications directly."""
+
 import json
 from http import HTTPStatus
 from logging import getLogger
@@ -36,7 +38,7 @@ async def notify_whatsapp_event(request: Request, event: PublicEvent, payload: d
         content = event.model.model_validate(json.loads(content))
     except Exception:
         logger.exception("Error parsing content")
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)  # noqa: B904
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)
 
     phone_number = phone_number.replace(" ", "")
     configuration = WhatsappConfiguration(
@@ -51,4 +53,4 @@ async def notify_whatsapp_event(request: Request, event: PublicEvent, payload: d
     logger.info(f"Sending WhatsApp notification to {phone_number} for event {event}")
     notification = Notification.new(event=event, content_id=content.id)
     user.notifications[notification.id] = notification
-    firestore.client.users.update(user, "notifications")
+    firestore.client.users.update(user, "notifications")  # pyright: ignore[reportPrivateImportUsage]  # TODO(NOT-26): export client in cumplo-common

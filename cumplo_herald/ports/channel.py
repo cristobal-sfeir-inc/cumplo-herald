@@ -1,3 +1,5 @@
+"""Abstract port interfaces for notification channels."""
+
 from abc import ABC, abstractmethod
 from typing import Any, Protocol, final
 
@@ -17,6 +19,8 @@ class ChannelPayload(Protocol):
 
 
 class Channel(EnforceOverrides, ABC):
+    """Abstract base class for notification channel adapters."""
+
     configuration: ChannelConfiguration
     type_: ChannelType
     user: User

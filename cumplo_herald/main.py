@@ -1,3 +1,5 @@
+"""FastAPI application entry point: configures logging, middleware, and routers."""
+
 import warnings
 from logging import DEBUG, ERROR, INFO, basicConfig, getLogger
 
