@@ -1,3 +1,5 @@
+"""WhatsApp channel adapter for sending notifications via the Twilio API."""
+
 from decimal import Decimal
 from logging import getLogger
 from typing import Any, override
@@ -19,7 +21,9 @@ logger = getLogger(__name__)
 
 
 class Whatsapp(Channel):
-    configuration: WhatsappConfiguration
+    """Channel adapter that delivers messages to a user's WhatsApp number via Twilio."""
+
+    configuration: WhatsappConfiguration  # pyright: ignore[reportIncompatibleVariableOverride]  # TODO(NOT-26): fix via Channel generics
     type_ = ChannelType.WHATSAPP
     client: Client
     user: User

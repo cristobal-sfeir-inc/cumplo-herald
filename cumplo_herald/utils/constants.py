@@ -1,3 +1,5 @@
+"""Runtime constants and environment-variable bindings for cumplo-herald."""
+
 import json
 import os
 
