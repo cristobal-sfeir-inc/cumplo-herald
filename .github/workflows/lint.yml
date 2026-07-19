@@ -13,6 +13,9 @@ jobs:
   lint:
     name: Lint & type-check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -32,6 +35,18 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-py3.13-${{ hashFiles('poetry.lock') }}
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.PUBLISH_SA }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Configure Poetry registry credentials
+        run: poetry config http-basic.cumplo-pypi oauth2accesstoken "$(gcloud auth print-access-token)"
 
       - name: Install dependencies
         run: poetry install --no-interaction
