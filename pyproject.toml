@@ -14,7 +14,7 @@ google-cloud-logging = "^3.5.0"
 fastapi = "^0.109.1"
 uvicorn = "^0.23.1"
 case-converter = "^1.1.0"
-cumplo-common = { version = "^1.12.8", source = "cumplo-pypi" }
+cumplo-common = { version = "^1.12.10", source = "cumplo-pypi" }
 twilio = "^9.0.2"
 overrides = "^7.7.0"
 gunicorn = "^23.0.0"
