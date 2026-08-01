@@ -16,10 +16,9 @@ class WebhookMessage(Message):
     data: dict
 
 
-class Webhook(Channel):
+class Webhook(Channel[WebhookConfiguration]):
     """Channel adapter that posts event payloads to a user-configured HTTP endpoint."""
 
-    configuration: WebhookConfiguration  # pyright: ignore[reportIncompatibleVariableOverride]  # TODO(NOT-26): fix via Channel generics
     type_ = ChannelType.WEBHOOK
 
     @override
@@ -33,8 +32,7 @@ class Webhook(Channel):
             is_internal=False,
         )
 
-    @staticmethod
     @override
-    def _write_funding_request_promising(content: FundingRequest) -> WebhookMessage:  # pyright: ignore[reportIncompatibleMethodOverride]  # TODO(NOT-26): fix via Channel generics
+    def _write_funding_request_promising(self, content: FundingRequest) -> WebhookMessage:
         """Write the message for the funding_request.promising event."""
         return WebhookMessage(event=PublicEvent.FUNDING_REQUEST_PROMISING, data=content.json())

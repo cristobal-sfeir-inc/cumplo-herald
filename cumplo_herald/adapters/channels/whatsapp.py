@@ -20,10 +20,9 @@ from cumplo_herald.utils.constants import (
 logger = getLogger(__name__)
 
 
-class Whatsapp(Channel):
+class Whatsapp(Channel[WhatsappConfiguration]):
     """Channel adapter that delivers messages to a user's WhatsApp number via Twilio."""
 
-    configuration: WhatsappConfiguration  # pyright: ignore[reportIncompatibleVariableOverride]  # TODO(NOT-26): fix via Channel generics
     type_ = ChannelType.WHATSAPP
     client: Client
     user: User

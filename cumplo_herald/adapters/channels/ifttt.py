@@ -19,10 +19,9 @@ class IFTTTMessage(Message):
     value3: str = Field(..., alias="url")
 
 
-class IFTTT(Channel):
+class IFTTT(Channel[IFTTTConfiguration]):
     """Channel adapter that queues IFTTT webhook triggers via Cloud Tasks."""
 
-    configuration: IFTTTConfiguration  # pyright: ignore[reportIncompatibleVariableOverride]  # TODO(NOT-26): fix via Channel generics
     type_ = ChannelType.IFTTT
 
     @property
@@ -41,9 +40,8 @@ class IFTTT(Channel):
             is_internal=False,
         )
 
-    @staticmethod
     @override
-    def _write_funding_request_promising(content: FundingRequest) -> IFTTTMessage:  # pyright: ignore[reportIncompatibleMethodOverride]  # TODO(NOT-26): fix via Channel generics
+    def _write_funding_request_promising(self, content: FundingRequest) -> IFTTTMessage:
         """Write the message for the funding_request.promising event."""
         monthly_profit_rate = round(Decimal(content.monthly_profit_rate * 100), ndigits=2)
         return IFTTTMessage(

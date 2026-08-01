@@ -6,7 +6,7 @@ from logging import getLogger
 from typing import cast
 
 import ulid
-from cumplo_common.database import firestore
+from cumplo_common.database.firestore.client import client as firestore_client
 from cumplo_common.models import Notification, PublicEvent, User, WhatsappConfiguration
 from fastapi import APIRouter, HTTPException, Request
 
@@ -53,4 +53,4 @@ async def notify_whatsapp_event(request: Request, event: PublicEvent, payload: d
     logger.info(f"Sending WhatsApp notification to {phone_number} for event {event}")
     notification = Notification.new(event=event, content_id=content.id)
     user.notifications[notification.id] = notification
-    firestore.client.users.update(user, "notifications")  # pyright: ignore[reportPrivateImportUsage]  # TODO(NOT-26): export client in cumplo-common
+    firestore_client.users.update(user, "notifications")
