@@ -3,7 +3,7 @@ export
 
 .PHONY: lint
 lint:
-	@poetry run ruff check .
+	@poetry run ruff check --no-fix .
 	@poetry run ruff format --check .
 	@poetry run basedpyright
 	@poetry run docformatter --check --recursive cumplo_herald
