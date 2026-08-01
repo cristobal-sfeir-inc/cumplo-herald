@@ -6,13 +6,13 @@ lint:
 	@poetry run ruff check .
 	@poetry run ruff format --check .
 	@poetry run basedpyright
-	@poetry run docformatter --check --recursive .
+	@poetry run docformatter --check --recursive cumplo_herald
 
 .PHONY: format
 format:
 	@poetry run ruff format .
 	@poetry run ruff check --fix .
-	@poetry run docformatter --in-place --recursive .
+	@poetry run docformatter --in-place --recursive cumplo_herald
 
 build:
 	@docker-compose build cumplo-herald --build-arg CUMPLO_PYPI_BASE64_KEY=`base64 -i cumplo-pypi-credentials.json`
