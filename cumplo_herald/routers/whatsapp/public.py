@@ -1,8 +1,10 @@
+"""Public WhatsApp router: Twilio webhook handler for button-reply interactions."""
+
 from enum import StrEnum
 from http import HTTPStatus
 from logging import getLogger
 
-from cumplo_common.database import firestore
+from cumplo_common.database.firestore.client import client as firestore_client
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
@@ -64,7 +66,7 @@ async def whatsapp_webhook(
 
     id_user, id_notification = payload.split(":")
 
-    if not (user := firestore.client.users.get(id_user)):
+    if not (user := firestore_client.users.get(id_user)):
         logger.error(f"User {id_user} not found")
         return
 
@@ -80,7 +82,7 @@ async def whatsapp_webhook(
                 return
             notification.dismissed = True
             user.notifications[id_notification] = notification
-            firestore.client.users.update(user, "notifications")
+            firestore_client.users.update(user, "notifications")
             response = f"*Funding Request N° {notification.content_id}*\n🔕 *Dismissed*"
         case _:
             logger.warning(f"Unknown button text: {text}")

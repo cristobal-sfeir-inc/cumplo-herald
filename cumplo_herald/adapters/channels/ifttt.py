@@ -1,3 +1,5 @@
+"""IFTTT channel adapter for sending notifications via IFTTT webhooks."""
+
 from decimal import Decimal
 from typing import override
 
@@ -10,13 +12,16 @@ from cumplo_herald.utils.constants import IFTTT_QUEUE
 
 
 class IFTTTMessage(Message):
+    """Pydantic message payload for IFTTT triggers."""
+
     value1: str = Field(..., alias="message")
     value2: str = Field(..., alias="title")
     value3: str = Field(..., alias="url")
 
 
-class IFTTT(Channel):
-    configuration: IFTTTConfiguration
+class IFTTT(Channel[IFTTTConfiguration]):
+    """Channel adapter that queues IFTTT webhook triggers via Cloud Tasks."""
+
     type_ = ChannelType.IFTTT
 
     @property
@@ -35,9 +40,8 @@ class IFTTT(Channel):
             is_internal=False,
         )
 
-    @staticmethod
     @override
-    def _write_funding_request_promising(content: FundingRequest) -> IFTTTMessage:
+    def _write_funding_request_promising(self, content: FundingRequest) -> IFTTTMessage:
         """Write the message for the funding_request.promising event."""
         monthly_profit_rate = round(Decimal(content.monthly_profit_rate * 100), ndigits=2)
         return IFTTTMessage(

@@ -1,3 +1,5 @@
+"""WhatsApp channel adapter for sending notifications via the Twilio API."""
+
 from decimal import Decimal
 from logging import getLogger
 from typing import Any, override
@@ -18,8 +20,9 @@ from cumplo_herald.utils.constants import (
 logger = getLogger(__name__)
 
 
-class Whatsapp(Channel):
-    configuration: WhatsappConfiguration
+class Whatsapp(Channel[WhatsappConfiguration]):
+    """Channel adapter that delivers messages to a user's WhatsApp number via Twilio."""
+
     type_ = ChannelType.WHATSAPP
     client: Client
     user: User

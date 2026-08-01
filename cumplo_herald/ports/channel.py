@@ -1,9 +1,13 @@
+"""Abstract port interfaces for notification channels."""
+
 from abc import ABC, abstractmethod
-from typing import Any, Protocol, final
+from typing import Any, Generic, Protocol, TypeVar, final
 
 from cumplo_common.models import ChannelConfiguration, ChannelType, FundingRequest, PublicEvent, User
 from overrides import EnforceOverrides
 from pydantic import BaseModel
+
+TConfig = TypeVar("TConfig", bound=ChannelConfiguration)
 
 
 class Message(BaseModel):
@@ -16,12 +20,14 @@ class ChannelPayload(Protocol):
     id: int
 
 
-class Channel(EnforceOverrides, ABC):
-    configuration: ChannelConfiguration
+class Channel(EnforceOverrides, ABC, Generic[TConfig]):
+    """Abstract base class for notification channel adapters."""
+
+    configuration: TConfig
     type_: ChannelType
     user: User
 
-    def __init__(self, user: User, configuration: ChannelConfiguration) -> None:
+    def __init__(self, user: User, configuration: TConfig) -> None:
         self.configuration = configuration
         self.user = user
 

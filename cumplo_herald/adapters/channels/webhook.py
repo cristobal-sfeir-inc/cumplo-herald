@@ -1,3 +1,5 @@
+"""Webhook channel adapter for forwarding events to arbitrary HTTP endpoints."""
+
 from typing import override
 
 from cumplo_common.integrations.cloud_tasks import CloudTasks
@@ -8,12 +10,15 @@ from cumplo_herald.utils.constants import WEBHOOK_QUEUE
 
 
 class WebhookMessage(Message):
+    """Pydantic message payload for webhook deliveries."""
+
     event: PublicEvent
     data: dict
 
 
-class Webhook(Channel):
-    configuration: WebhookConfiguration
+class Webhook(Channel[WebhookConfiguration]):
+    """Channel adapter that posts event payloads to a user-configured HTTP endpoint."""
+
     type_ = ChannelType.WEBHOOK
 
     @override
@@ -27,8 +32,7 @@ class Webhook(Channel):
             is_internal=False,
         )
 
-    @staticmethod
     @override
-    def _write_funding_request_promising(content: FundingRequest) -> WebhookMessage:
+    def _write_funding_request_promising(self, content: FundingRequest) -> WebhookMessage:
         """Write the message for the funding_request.promising event."""
         return WebhookMessage(event=PublicEvent.FUNDING_REQUEST_PROMISING, data=content.json())
